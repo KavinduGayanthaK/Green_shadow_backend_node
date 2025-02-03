@@ -1,9 +1,18 @@
 import express from 'express';
-
+import mongoose from 'mongoose';
 
 const app = express();
 
+mongoose.connect("mongodb://localhost:27017/greenshadownode")
+const db = mongoose.connection
 
+db.on("error",(error)=>{
+    console.error("DB connection error : ",error)
+})
+
+db.on("open",()=>{
+    console.log("DB connected successfully")
+})
 
 app.use(express.json());
 app.use('/',(req,res,next)=>{

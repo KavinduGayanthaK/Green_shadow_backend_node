@@ -33,6 +33,7 @@ export interface IStaff extends Document {
   fields: mongoose.Types.ObjectId[];
   vehicles: mongoose.Types.ObjectId[];
   equipments: mongoose.Types.ObjectId[];
+  logs: mongoose.Types.ObjectId[];
 }
 
 const staff = new Schema<IStaff>({
@@ -67,7 +68,8 @@ const staff = new Schema<IStaff>({
   role: { type: String, required: true,enum:["ADMINISTRATIVE","MANAGER","SCIENTIFIC","OTHER"] },
   fields: [{type: mongoose.Schema.Types.ObjectId, ref: "field"}],
   vehicles:[{type: mongoose.Schema.Types.ObjectId, ref: "vehicle"}],
-  equipments:[{type: mongoose.Schema.Types.ObjectId, ref: "equipment"}]
+  equipments:[{type: mongoose.Schema.Types.ObjectId, ref: "equipment"}],
+  logs:[{type: mongoose.Schema.Types.ObjectId, ref: "equipment"}],
 });
 
 const Staff = mongoose.model<any>("Staff",staff);

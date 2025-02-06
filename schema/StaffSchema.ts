@@ -66,10 +66,10 @@ const staff = new Schema<IStaff>({
   contactNumber: {type: String, required: true},
   email: {type: String, required: true, unique: true},
   role: { type: String, required: true,enum:["ADMINISTRATIVE","MANAGER","SCIENTIFIC","OTHER"] },
-  fields: [{type: mongoose.Schema.Types.ObjectId, ref: "field"}],
-  vehicles:[{type: mongoose.Schema.Types.ObjectId, ref: "vehicle"}],
-  equipments:[{type: mongoose.Schema.Types.ObjectId, ref: "equipment"}],
-  logs:[{type: mongoose.Schema.Types.ObjectId, ref: "equipment"}],
+  fields: [{type: mongoose.Schema.Types.ObjectId, ref: "Field"}],
+  vehicles:[{type: mongoose.Schema.Types.ObjectId, ref: "Vehicle"}],
+  equipments:[{type: mongoose.Schema.Types.ObjectId, ref: "Equipment"}],
+  logs:[{type: mongoose.Schema.Types.ObjectId, ref: "Log"}],
 });
 
 const Staff = mongoose.model<any>("Staff",staff);

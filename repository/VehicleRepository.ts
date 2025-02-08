@@ -1,4 +1,3 @@
-import { listenerCount } from "process";
 import Vehicle from "../schema/VehicleSchema";
 import logger from "../logger/Logger";
 

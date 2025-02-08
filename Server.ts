@@ -1,5 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import VehicleRouter from './/routes/VehicleRoutes'
 
 const app = express();
 
@@ -27,7 +28,8 @@ app.use('/',(req,res,next)=>{
 app.listen(3000, (err=>{
     console.log("Server running on port 3000");
 }));
+app.use('/vehicle',VehicleRouter)
 
 app.use('/',(req,res,next)=>{
-    res.status(200).send('Not Found');
+    res.status(400).send('Not Found');
 })

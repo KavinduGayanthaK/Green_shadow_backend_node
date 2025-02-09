@@ -17,9 +17,10 @@ export class StaffModel {
     fields:string[];
     vehicles:string[];
     equipments:string[];
+    logs:string[];
 
     constructor(id:string,firstName:string,lastName:string,designation:string,gender:string,joinedDate:string | null,dateOfBirth:string | null,buildingNumber:string,lane:string,city:string,
-        state:string,postalCode:string,contactNumber:string,email:string,role:string,fields:string[],vehicles:string[],equipments:string[]) {
+        state:string,postalCode:string,contactNumber:string,email:string,role:string,fields:string[],vehicles:string[],equipments:string[],logs:string[]) {
         this.staffId = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -38,5 +39,6 @@ export class StaffModel {
         this.fields = fields;
         this.vehicles = vehicles;
         this.equipments = equipments;
+        this.logs = logs;
     }
 }

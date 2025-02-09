@@ -1,12 +1,13 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-export type RoleType = "ADMINISTRATIVE" | "MANAGER" | "SCIENTIFIC" | "OTHER";
+export type RoleType = "ADMINISTRATIVE" | "MANAGER" | "SCIENTIST" | "OTHER";
 export type DesignationType =
   | "ASSISTANTMANAGER"
   | "ADMINANDHRSTAFF"
   | "OFFICEASSISTANT"
   | "SENIORAGRONOMIST"
   | "AGRONOMIST"
+  | "SOILSCIENTIST"
   | "SENIORTECHNICIAN"
   | "TECHNICIAN"
   | "SUPERVISOR"
@@ -49,6 +50,7 @@ const staff = new Schema<IStaff>({
       "OFFICEASSISTANT",
       "SENIORAGRONOMIST",
       "AGRONOMIST",
+      "SOILSCIENTIST",
       "SENIORTECHNICIAN",
       "TECHNICIAN",
       "SUPERVISOR",
@@ -65,7 +67,7 @@ const staff = new Schema<IStaff>({
   postalCode: {type: String, required: true},
   contactNumber: {type: String, required: true},
   email: {type: String, required: true, unique: true},
-  role: { type: String, required: true,enum:["ADMINISTRATIVE","MANAGER","SCIENTIFIC","OTHER"] },
+  role: { type: String, required: true,enum:["ADMINISTRATIVE","MANAGER","SCIENTIST","OTHER"] },
   fields: [{type: mongoose.Schema.Types.ObjectId, ref: "Field"}],
   vehicles:[{type: mongoose.Schema.Types.ObjectId, ref: "Vehicle"}],
   equipments:[{type: mongoose.Schema.Types.ObjectId, ref: "Equipment"}],

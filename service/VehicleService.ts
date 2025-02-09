@@ -14,12 +14,10 @@ export class VehicleService {
                 fuelType: vehicleData.fuelType,
                 vehicleStatus: vehicleData.vehicleStatus,
                 specialRemark: vehicleData.specialRemark,
-                vehicleStaffMember: vehicleData.vehicleStaffMember
+                vehicleStaffMember: vehicleData.vehicleStaffMember || null
             });
             const save = await this.vehicleRepository.AddVehicle(newVeicle);
-            if(save) {
-                return {message:save}
-            }
+            return { message: "Vehicle saved successfully", vehicle: save };
             
         }catch(error) {
             console.error("Service layer error: Failed to save crops!");

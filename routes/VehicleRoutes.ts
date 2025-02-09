@@ -1,5 +1,4 @@
 import  express  from "express";
-import { isExpression } from "typescript";
 import { VehicleModel } from "../model/VehicleModel";
 import { VehicleService } from "../service/VehicleService";
 

@@ -18,7 +18,7 @@ const vehicle = new Schema<IVehicle>({
     fuelType: {type: String, required: true},
     vehicleStatus: {type: String, required: true},
     specialRemark: {type: String, required: true},
-    vehicleStaffMember: { type: String, required: true },
+    vehicleStaffMember: { type: String, required: true, default: null },
 })
 
 const Vehicle = mongoose.model<any>("Vehicle",vehicle);

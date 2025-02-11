@@ -1,4 +1,4 @@
-export class StaffModel {
+export class FieldModel {
     fieldCode:string;
     fieldName:string;
     fieldLocation:string;

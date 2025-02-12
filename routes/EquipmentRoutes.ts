@@ -16,7 +16,18 @@ router.post('/add',async(req,res)=>{
         console.log("error adding equipment", error);
         res.status(400).send("error adding equipment");
     }
-})
+});
+
+router.get('/getAllEquipment',async(req,res)=>{
+    try{
+        const equipmentList = await equipmentService.getAllEquipment();
+        res.json(equipmentList);
+    }catch(error) {
+        console.log("error get all equipment : ",error);
+        res.status(400).send("error getting equipment")
+    }
+});
+
 
 
 export default router;

@@ -23,4 +23,14 @@ export class EquipmentRepository{
             return {message: "Fiaild to save equipment. Try again later"};
         }
     }
+
+    async getAllEquipment() {
+        try{
+            const equipmentList = await Equipment.find();
+            return equipmentList;
+        }catch (error) {
+            logger.error("Failed to fetch equipment : ",error);
+            return { message: "Failed to fetch equipment. Please try again.", error };
+        }
+    }
 }

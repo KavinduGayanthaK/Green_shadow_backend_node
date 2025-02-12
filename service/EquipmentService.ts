@@ -36,5 +36,14 @@ export class EquipmentService {
             console.error("Service layer error: Failed to save Equipment!");
             throw new Error("Failed to save Equipment. Please try again.");
         }
-    }
+    };
+
+    async getAllEquipment() {
+        try{
+          const equipmentList = this.equipmentRepository.getAllEquipment();
+          return equipmentList
+        }catch( error) {
+          return error;
+        }
+      };
 }

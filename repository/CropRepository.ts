@@ -24,4 +24,13 @@ export class CropRepository{
             return {message: "Fiaild to save crop. Try again later"};
         }
     }
+    async getAllCrop() {
+        try{
+            const cropList = await Crop.find();
+            return cropList;
+        }catch (error) {
+            logger.error("Failed to fetch crop : ",error);
+            return { message: "Failed to fetch crop. Please try again.", error };
+        }
+    }
 }

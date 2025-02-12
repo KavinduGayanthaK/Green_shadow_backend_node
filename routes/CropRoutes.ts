@@ -15,6 +15,16 @@ router.post('/add',async(req,res)=>{
         console.log("error adding crop", error);
         res.status(400).send("error adding crop");
     }
+});
+
+router.get('/getAllCrop',async(req,res)=>{
+    try{
+        const cropList = await cropService.getAllCrop();
+        res.json(cropList);
+    }catch(error) {
+        console.log("error get all crop : ",error);
+        res.status(400).send("error getting crop")
+    }
 })
 
 

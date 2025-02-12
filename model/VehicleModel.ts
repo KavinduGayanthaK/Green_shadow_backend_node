@@ -1,5 +1,4 @@
 export class VehicleModel {
-
   licensePlateNumber: string;
   category: string;
   fuelType: string;
@@ -23,5 +22,3 @@ export class VehicleModel {
     this.vehicleStaffMember = vehicleStaffMember;
   }
 }
-
-

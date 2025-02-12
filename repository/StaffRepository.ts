@@ -34,4 +34,14 @@ export class StaffRepository {
             return { message: "Failed to save staff. Please try again.", error };
         }
     }
+
+    async getAllStaff() {
+        try{
+            const staffList = await Staff.find();
+            return staffList;
+        }catch (error) {
+            logger.error("Failed to fetch staff : ",error);
+            return { message: "Failed to fetch staff. Please try again.", error };
+        }
+    }
 }

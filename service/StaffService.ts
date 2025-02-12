@@ -5,11 +5,11 @@ import Log from "../schema/LogSchema";
 import Vehicle from "../schema/VehicleSchema";
 import Equipment from "../schema/EquipmentSchema";
 import Staff from "../schema/StaffSchema";
-import { saveCropService } from "./CropService";
 import { StaffRepository } from "../repository/StaffRepository";
 
 export class StaffService {
   staffRepository = new StaffRepository();
+
   async addStaff(staffData: StaffModel) {
     try {
       let staffFieldCode: mongoose.Types.ObjectId[] = [];
@@ -76,4 +76,15 @@ export class StaffService {
       throw new Error("Failed to save staff. Please try again.");
     }
   }
+
+  async getAllStaff() {
+    try{
+      const staffList = this.staffRepository.getAllStaff();
+      return staffList
+    }catch( error) {
+      return error;
+    }
+  }
+
+
 }

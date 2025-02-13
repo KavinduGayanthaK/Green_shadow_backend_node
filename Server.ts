@@ -34,6 +34,7 @@ app.use('/staff',StaffRouter);
 app.use('/field',StaffRouter);
 app.use('/equipment',StaffRouter);
 app.use('/crop',StaffRouter);
+app.use('/log',StaffRouter);
 
 app.use('/',(req,res,next)=>{
     res.status(400).send('Not Found');

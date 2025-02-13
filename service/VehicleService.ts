@@ -24,4 +24,13 @@ export class VehicleService {
             throw new Error("Failed to save crops. Please try again.");
         }
     }
+
+    async getAllVehicle() {
+        try{
+          const vehicleList = this.vehicleRepository.getAllVehicle();
+          return vehicleList;
+        }catch( error) {
+          return error;
+        }
+      };
 }

@@ -26,4 +26,14 @@ export class VehicleRepoairory {
             logger.error("vehicle not saved ");
         }
     }
+
+    async getAllVehicle() {
+        try{
+            const vehicleList = await Vehicle.find();
+            return vehicleList;
+        }catch (error) {
+            logger.error("Failed to fetch vehicle : ",error);
+            return { message: "Failed to fetch vehicle. Please try again.", error };
+        }
+    }
 }

@@ -15,6 +15,16 @@ router.post('/add',async(req,res)=>{
         console.log("error adding customer", err);
         res.status(400).send("error adding customer");
     }
-})
+});
+
+router.get('/getAllVehicle',async(req,res)=>{
+    try{
+        const vehicleList = await vehicleService.getAllVehicle();
+        res.json(vehicleList);
+    }catch(error) {
+        console.log("error get all vehicle : ",error);
+        res.status(400).send("error getting vehicle");
+    }
+});
 
 export default router;

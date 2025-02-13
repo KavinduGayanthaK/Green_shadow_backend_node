@@ -22,5 +22,15 @@ export class FieldRepository{
             logger.error("Faild to save field");
             return {message: "Fiaild to save filed. Try again later"};
         }
+    };
+
+    async getAllField() {
+        try{
+            const fieldList = await Field.find();
+            return fieldList;
+        }catch (error) {
+            logger.error("Failed to fetch field : ",error);
+            return { message: "Failed to fetch field. Please try again.", error };
+        }
     }
 }

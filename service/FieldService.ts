@@ -46,5 +46,14 @@ export class FieldService {
         console.error("Service layer error: Failed to save Field!");
         throw new Error("Failed to save Field. Please try again.");
     }
-  }
+  };
+
+  async getAllFields() {
+    try{
+      const fieldList = this.fieldRepository.getAllField();
+      return fieldList;
+    }catch( error) {
+      return error;
+    }
+  };
 }

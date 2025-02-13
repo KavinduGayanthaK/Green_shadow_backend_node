@@ -31,6 +31,7 @@ app.listen(3000, (err=>{
 }));
 app.use('/vehicle',VehicleRouter);
 app.use('/staff',StaffRouter);
+app.use('/field',StaffRouter);
 
 app.use('/',(req,res,next)=>{
     res.status(400).send('Not Found');

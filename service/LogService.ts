@@ -45,4 +45,13 @@ export class LogService {
             throw new Error("Failed to save log. Please try again.");
         }
     }
+
+    async getAllLog() {
+        try{
+          const logList = this.logRepository.getAllLog();
+          return logList;
+        }catch( error) {
+          return error;
+        }
+      };
 }

@@ -16,7 +16,17 @@ router.post('/add',async(req,res)=>{
         console.log("error adding log", error);
         res.status(400).send("error adding log");
     }
-})
+});
+
+router.get('/getAllLog',async(req,res)=>{
+    try{
+        const logList = await logService.getAllLog();
+        res.json(logList);
+    }catch(error) {
+        console.log("error get all log : ",error);
+        res.status(400).send("error getting log");
+    }
+});
 
 
 export default router;

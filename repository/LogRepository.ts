@@ -25,4 +25,14 @@ export class LogRepository{
             return {message: "Fiaild to save log. Try again later"};
         }
     }
+
+    async getAllLog() {
+        try{
+            const logList = await Log.find();
+            return logList;
+        }catch (error) {
+            logger.error("Failed to fetch log : ",error);
+            return { message: "Failed to fetch log. Please try again.", error };
+        }
+    }
 }

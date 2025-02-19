@@ -38,4 +38,23 @@ export class CropService {
             throw new Error("Failed to save crop. Please try again.");
         }
     }
+
+    async getAllCrop() {
+        try{
+          const cropList = this.cropRepository.getAllCrop();
+          const newList = cropList.map(crop=>({
+            cropCode: crop.cropCode,
+            commonName: crop.commonName,
+            scientificName: crop.scientificName,
+            cropCategory: crop.cropCategory,
+            cropSeason: crop.cropSeason,
+            cropFields: crop.cropFields.map((field)=> field.fieldCode), // Extract only IDs
+            cropLogs: crop.cropLogs.map(log => log.logCode), // Extract only IDs
+            cropImage: crop.cropImage
+          }));
+          return newList;
+        }catch( error) {
+          return error;
+        }
+      }
 }

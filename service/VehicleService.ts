@@ -1,10 +1,10 @@
 import { VehicleModel } from "../model/VehicleModel";
-import { VehicleRepoairory } from "../repository/VehicleRepository";
+import { VehicleRepository } from "../repository/VehicleRepository";
 import Vehicle from "../schema/VehicleSchema";
 
 export class VehicleService {
    
-    vehicleRepository = new VehicleRepoairory;
+    vehicleRepository = new VehicleRepository;
 
     async addVehicle(vehicleData:VehicleModel) {
         try{
@@ -16,7 +16,7 @@ export class VehicleService {
                 specialRemark: vehicleData.specialRemark,
                 vehicleStaffMember: vehicleData.vehicleStaffMember || null
             });
-            const save = await this.vehicleRepository.AddVehicle(newVeicle);
+            const save = await this.vehicleRepository.addVehicle(newVeicle);
             return { message: "Vehicle saved successfully", vehicle: save };
             
         }catch(error) {
@@ -27,7 +27,7 @@ export class VehicleService {
 
     async getAllVehicle() {
         try{
-          const vehicleList = this.vehicleRepository.getAllVehicle();
+          const vehicleList = this.vehicleRepository.getAllVehicles();
           return vehicleList;
         }catch( error) {
           return error;

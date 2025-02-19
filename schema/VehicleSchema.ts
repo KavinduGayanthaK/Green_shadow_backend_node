@@ -9,7 +9,7 @@ export interface IVehicle extends Document {
     fuelType:vehicleFuelType;
     vehicleStatus:vehicelStatusType;
     specialRemark:string;
-    vehicleStaffMember:string;
+    vehicleStaffMember:string[];
 }
 
 const vehicle = new Schema<IVehicle>({
@@ -18,7 +18,7 @@ const vehicle = new Schema<IVehicle>({
     fuelType: {type: String, required: true},
     vehicleStatus: {type: String, required: true},
     specialRemark: {type: String, required: true},
-    vehicleStaffMember: { type: String, required: true, default: null },
+    vehicleStaffMember: { type: [String], default: [] },
 })
 
 const Vehicle = mongoose.model<any>("Vehicle",vehicle);

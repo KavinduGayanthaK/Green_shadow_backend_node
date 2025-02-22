@@ -41,7 +41,7 @@ export class EquipmentRepository{
 
     async updateEquipment(equipmentId: string, updateData: Partial<IEquipment>) {
         try {
-            const updateEquipment = await Log.findOneAndUpdate(
+            const updateEquipment = await Equipment.findOneAndUpdate(
                 {equipmentId},
                 {$set: updateData},
                 {new: true}

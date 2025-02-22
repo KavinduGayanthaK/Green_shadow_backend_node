@@ -108,17 +108,18 @@ export class CropRepository {
 
   async updateCropAssignLog(code: string, logData: LogModel) {
     try {
-
-      const logDocs = await Log.findOne({ code }).
-      lean<{ _id: mongoose.Types.ObjectId}>();
+      const logDocs = await Log.findOne({ code }).lean<{
+        _id: mongoose.Types.ObjectId;
+      }>();
 
       if (!logDocs) {
         throw new Error(`Log with code ${code} not found`);
       }
       const logId = logDocs._id;
 
-      const existingCropDocs = await Crop.find({ cropLogs: logId }).
-      lean<{ _id: mongoose.Types.ObjectId }[]>();
+      const existingCropDocs = await Crop.find({ cropLogs: logId }).lean<
+        { _id: mongoose.Types.ObjectId }[]
+      >();
 
       const existingCropIds = existingCropDocs.map((crop) => crop._id);
 
@@ -153,5 +154,56 @@ export class CropRepository {
       console.error("Error updating crop assignLogs:", e);
       throw e;
     }
+  }
+
+  async deleteFieldInCrop(code: string) {
+    try {
+      const cropDocs = await Crop.findOne({ code }).lean<{
+        _id: mongoose.Types.ObjectId;
+      } | null>();
+      if (!cropDocs) {
+        throw new Error(`Crop with code ${code} not found`);
+      }
+
+      const cropCode = cropDocs._id;
+      return await Crop.updateMany(
+        { cropFields: cropCode },
+        { $pull: { cropFields: cropCode } }
+      );
+    } catch (error) {
+      console.log();
+    }
+  }
+
+  async deleteLogInCrop(code: string) {
+    try {
+      const logDocs = await Log.findOne({ code }).lean<{
+        _id: mongoose.Types.ObjectId;
+      } | null>();
+      if (!logDocs) {
+        throw new Error(`Log with code ${code} not found`);
+      }
+
+      const logCode = logDocs._id;
+      return await Crop.updateMany(
+        { cropLogs: logCode },
+        { $pull: { cropLogs: logCode } }
+      );
+    } catch (error) {
+      console.log();
+    }
+  }
+
+  async getSelectedCrop(_ids: mongoose.Types.ObjectId[]) {
+    try {
+        return await Crop.find({ _id: { $in: _ids } });
+    } catch (e) {
+        console.error("Error fetching selected crop:", e);
+        throw new Error("Failed to fetch selected crop. Please try again.");
+    }
+  }
+
+  async findCropById(code: string) : Promise<ICrop | null> {
+      return await Crop.findOne({ code }).populate("cropFields").populate("cropLogs").exec();
   }
 }

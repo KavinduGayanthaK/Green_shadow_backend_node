@@ -1,4 +1,4 @@
-import Vehicle from "../schema/VehicleSchema";
+import Vehicle, { IVehicle } from "../schema/VehicleSchema";
 import logger from "../logger/Logger";
 import { StaffModel } from "../model/StaffModel";
 import Staff from "../schema/StaffSchema";
@@ -42,8 +42,19 @@ export class VehicleRepository {
         }
     }
 
-    async updateVehicle() {
+    async updateVehicle(licensePlateNumber: string, updateData: Partial<IVehicle>) {
+        try {
+            const updateVehicle = await Vehicle.findOneAndUpdate(
+                {licensePlateNumber},
+                {$set: updateData},
+                {new: true}
+            );
 
+            return updateVehicle;
+        }catch(error) {
+            console.error("Failed to update vehicle:", error);
+            throw error;
+        }
     }
 
     async updateVehicleAssignStaff(code: string, staffData: StaffModel) {
@@ -96,5 +107,26 @@ export class VehicleRepository {
             console.error("Error fetching selected vehicles:", e);
             throw new Error("Failed to fetch selected vehicles. Please try again.");
         }
+    }
+
+    async deleteStaffInVehicle(code: string) {
+        try {
+            const staffDoc = await Staff.findOne({ code }).lean<{ _id: mongoose.Types.ObjectId } | null>();
+            if (!staffDoc) {
+                throw new Error(`Staff with code ${code} not found`);
+            }
+            const staffId = staffDoc._id;
+            return await Vehicle.updateMany(
+                { vehicleStaffMember: staffId },
+                { $pull: { vehicleStaffMember: staffId } }
+            );
+        } catch (e) {
+            console.error("Error removing staff from vehicle:", e);
+            throw e;
+        }
+    }
+
+    async findVehicleById(code: string) : Promise<IVehicle | null> {
+        return await Vehicle.findOne({ code }).populate("vehicleStaffMember").exec();
     }
 }

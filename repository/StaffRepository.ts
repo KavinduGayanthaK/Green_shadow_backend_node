@@ -55,7 +55,7 @@ export class StaffRepository {
         }
     }
 
-    async updateStafff(staffId: string, updateData: Partial<IStaff>) {
+    async updateStaff(staffId: string, updateData: Partial<IStaff>) {
         try {
             const updateStaff = await Staff.findOneAndUpdate(
                 {staffId},
@@ -147,13 +147,17 @@ export class StaffRepository {
     
     async updateStaffAssignLog(code: string, logData: LogModel) {
         try {
-            const logDocs = await Log.findOne({ code }).lean<{ _id: mongoose.Types.ObjectId }>();
+            const logDocs = await Log.findOne({ code }).
+            lean<{ _id: mongoose.Types.ObjectId }>();
             if (!logDocs) {
-                throw new Error('Log with code ${code} not found');
+                throw new Error(`Log with code ${code} not found`);
             }
             const logId = logDocs._id;
     
-            const existingStaffDocs = await Staff.find({ assignLogs: logId }).lean<{ _id: mongoose.Types.ObjectId }[]>();
+            const existingStaffDocs = await Staff.
+            find({ assignLogs: logId }).
+            lean<{ _id: mongoose.Types.ObjectId }[]>();
+
             const existingStaffIds = existingStaffDocs.map(staff => staff._id);
     
             const updatedStaffDocs = await Staff.find({ code: { $in: logData.logStaff } }).lean<{ _id: mongoose.Types.ObjectId }[]>();
@@ -185,21 +189,28 @@ export class StaffRepository {
     
     async updateFieldsAssignStaff(code: string, fieldData: FieldModel) {
         try {
-            const fieldDocs = await Field.findOne({ code }).lean<{ _id: mongoose.Types.ObjectId } | null>();
+            const fieldDocs = await Field.findOne({ code }).
+            lean<{ _id: mongoose.Types.ObjectId } | null>();
             if (!fieldDocs) {
-                throw new Error('Field with code ${code} not found');
+                throw new Error(`Field with code ${code} not found`);
             }
             const fieldId = fieldDocs._id;
     
-            const existingStaffDocs = await Staff.find({ assignFields: fieldId }).lean<{ _id: mongoose.Types.ObjectId }[]>();
+            const existingStaffDocs = await Staff.find({ assignFields: fieldId }).
+            lean<{ _id: mongoose.Types.ObjectId }[]>();
             const existingStaffIds = existingStaffDocs.map(staff => staff._id);
     
-            const updatedStaffDocs = await Staff.find({ code: { $in: fieldData.fieldStaff } }).lean<{ _id: mongoose.Types.ObjectId }[]>();
+            const updatedStaffDocs = await Staff.find({ 
+                code: { $in: fieldData.fieldStaff } }).
+                lean<{ _id: mongoose.Types.ObjectId }[]>();
+
             const updatedStaffIds = updatedStaffDocs.map(staff => staff._id);
     
-            const staffToRemoveField = existingStaffIds.filter(id => !updatedStaffIds.includes(id));
+            const staffToRemoveField = existingStaffIds.
+            filter(id => !updatedStaffIds.includes(id));
     
-            const staffToAddField = updatedStaffIds.filter(id => !existingStaffIds.includes(id));
+            const staffToAddField = updatedStaffIds.
+            filter(id => !existingStaffIds.includes(id));
     
             if (staffToRemoveField.length > 0) {
                 await Staff.updateMany(
@@ -226,7 +237,7 @@ export class StaffRepository {
         try {
             const vehicleDoc = await Vehicle.findOne({ code }).lean<{ _id: mongoose.Types.ObjectId } | null>();
             if (!vehicleDoc) {
-                throw new Error('Vehicle with code ${code} not found');
+                throw new Error(`Vehicle with code ${code} not found`);
             }
             const vehicleId = vehicleDoc._id;
             return await Staff.updateMany(
@@ -243,7 +254,7 @@ export class StaffRepository {
         try {
             const fieldDocs = await Field.findOne({ code }).lean<{ _id: mongoose.Types.ObjectId } | null>();
             if (!fieldDocs) {
-                throw new Error('Field with code ${code} not found');
+                throw new Error(`Field with code ${code} not found`);
             }
             const fieldId = fieldDocs._id;
             return await Staff.updateMany(
@@ -260,7 +271,7 @@ export class StaffRepository {
         try {
              const logDocs = await Log.findOne({ code }).lean<{ _id: mongoose.Types.ObjectId } | null>();
              if (!logDocs) {
-                 throw new Error('Log with code ${code} not found');
+                 throw new Error(`Log with code ${code} not found`);
              }
              const logId = logDocs._id;
              return await Staff.updateMany(

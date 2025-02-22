@@ -17,8 +17,8 @@ interface Log {
     logType: string;
     logImage: string;
     logFields: string[];
-    logCrops: string[];
-    logStaff: string[];
+    logCrops?: string[];
+    logStaff?: string[];
 }
 
 export class LogRepository{

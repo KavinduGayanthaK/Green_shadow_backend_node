@@ -13,8 +13,8 @@ interface Equipment {
     equipmentType:string;
     totalCount:number;
     status:string;
-    equipmentFields:string[];
-    equipmentStaffMembers:string[];
+    equipmentFields?:string[];
+    equipmentStaffMembers?:string[];
 }
 
 export class EquipmentRepository{

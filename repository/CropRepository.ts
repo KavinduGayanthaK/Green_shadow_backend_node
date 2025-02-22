@@ -14,8 +14,8 @@ interface Crop {
   scientificName: string;
   cropCategory: string;
   cropSeason: string;
-  cropFields: string[];
-  cropLogs: string[];
+  cropFields?: string[];
+  cropLogs?: string[];
   cropImage: string;
 }
 

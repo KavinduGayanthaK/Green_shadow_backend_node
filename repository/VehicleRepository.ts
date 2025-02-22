@@ -10,7 +10,7 @@ interface VehicleData {
     fuelType: string;
     vehicleStatus: string;
     specialRemark: string;
-    vehicleStaffMember: string; 
+    vehicleStaffMember?: string; 
     
 }
 

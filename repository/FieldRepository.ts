@@ -13,9 +13,9 @@ interface Field {
     fieldName:string;
     fieldLocation:string;
     extentSizeOfTheField:string;
-    fieldCrops:string[];
-    fieldStaff:string[];
-    fieldLogs:string[];
+    fieldCrops?:string[];
+    fieldStaff?:string[];
+    fieldLogs?:string[];
     fieldImage:string;
 }
 
@@ -218,6 +218,7 @@ export class FieldRepository{
             
         }
     }
+
     async deleteStaffInField(code: string) {
         try {
             const staffDocs = await Staff.findOne({code}).lean<{_id: mongoose.Types.ObjectId} | null>();

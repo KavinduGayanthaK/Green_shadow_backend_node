@@ -58,7 +58,7 @@ export class StaffRepository {
     async updateStaff(staffId: string, updateData: Partial<IStaff>) {
         try {
             const updateStaff = await Staff.findOneAndUpdate(
-                {staffId},
+                {staffId:staffId},
                 {$set: updateData},
                 {new: true}
             );
@@ -70,9 +70,23 @@ export class StaffRepository {
         }
     }
 
+    async  deleteStaff(code: string) {
+        try {
+            const result = await Staff.deleteOne(
+                { staffId:code }
+            );
+            return result
+                ? { message: "Staff delete successfully" }
+                : { message: "Staff delete unsuccessfully!" };
+        } catch (e) {
+            console.error("Failed to delete staff:", e);
+            throw e;
+        }
+    }
+
     async updateStaffAssignVehicle(code: string, vehicleData: VehicleModel) {
         try {
-            const vehicleDoc = await Vehicle.findOne({ code }).lean<{ _id: mongoose.Types.ObjectId } | null>();
+            const vehicleDoc = await Vehicle.findOne({ licensePlateNumber:code }).lean<{ _id: mongoose.Types.ObjectId } | null>();
             if (!vehicleDoc) {
                 throw new Error(`Vehicle with code ${code} not found`);
             }
@@ -109,7 +123,7 @@ export class StaffRepository {
 
     async updateStaffAssignEquipments(code: string, equData: EquipmentModel) {
         try {
-            const equipmentDocs = await Equipment.findOne({ code }).lean<{ _id: mongoose.Types.ObjectId } | null>();
+            const equipmentDocs = await Equipment.findOne({ equipmentId:code }).lean<{ _id: mongoose.Types.ObjectId } | null>();
             if (!equipmentDocs) {
                 throw new Error('Equipment with code ${code} not found');
             }
@@ -147,7 +161,7 @@ export class StaffRepository {
     
     async updateStaffAssignLog(code: string, logData: LogModel) {
         try {
-            const logDocs = await Log.findOne({ code }).
+            const logDocs = await Log.findOne({ logCode:code }).
             lean<{ _id: mongoose.Types.ObjectId }>();
             if (!logDocs) {
                 throw new Error(`Log with code ${code} not found`);
@@ -189,7 +203,7 @@ export class StaffRepository {
     
     async updateFieldsAssignStaff(code: string, fieldData: FieldModel) {
         try {
-            const fieldDocs = await Field.findOne({ code }).
+            const fieldDocs = await Field.findOne({ fieldCode:code }).
             lean<{ _id: mongoose.Types.ObjectId } | null>();
             if (!fieldDocs) {
                 throw new Error(`Field with code ${code} not found`);
@@ -235,14 +249,14 @@ export class StaffRepository {
     
     async deleteVehicleInStaff(code: string) {
         try {
-            const vehicleDoc = await Vehicle.findOne({ code }).lean<{ _id: mongoose.Types.ObjectId } | null>();
+            const vehicleDoc = await Vehicle.findOne({ licensePlateNumber:code }).lean<{ _id: mongoose.Types.ObjectId } | null>();
             if (!vehicleDoc) {
                 throw new Error(`Vehicle with code ${code} not found`);
             }
             const vehicleId = vehicleDoc._id;
             return await Staff.updateMany(
-                { assignVehicles: vehicleId },
-                { $pull: { assignVehicles: vehicleId } }
+                { vehicles: vehicleId },
+                { $pull: { vehicles: vehicleId } }
             );
         } catch (e) {
             console.error("Error removing vehicle from staff:", e);
@@ -252,14 +266,14 @@ export class StaffRepository {
     
     async deleteFieldInStaff(code: string) {
         try {
-            const fieldDocs = await Field.findOne({ code }).lean<{ _id: mongoose.Types.ObjectId } | null>();
+            const fieldDocs = await Field.findOne({ fieldCode:code }).lean<{ _id: mongoose.Types.ObjectId } | null>();
             if (!fieldDocs) {
                 throw new Error(`Field with code ${code} not found`);
             }
             const fieldId = fieldDocs._id;
             return await Staff.updateMany(
-                { assignField: fieldId },
-                { $pull: { assignField: fieldId } }
+                { fields: fieldId },
+                { $pull: { fields: fieldId } }
             );
         } catch (e) {
             console.error("Error removing field from staff:", e);
@@ -269,14 +283,14 @@ export class StaffRepository {
     
     async deleteLogInStaff(code: string) {
         try {
-             const logDocs = await Log.findOne({ code }).lean<{ _id: mongoose.Types.ObjectId } | null>();
+             const logDocs = await Log.findOne({ logCode:code }).lean<{ _id: mongoose.Types.ObjectId } | null>();
              if (!logDocs) {
                  throw new Error(`Log with code ${code} not found`);
              }
              const logId = logDocs._id;
              return await Staff.updateMany(
-                 { assignLogs: logId },
-                 { $pull: { assignLogs: logId } }
+                 { logs: logId },
+                 { $pull: { logs: logId } }
              );
         } catch (e) {
             console.error("Error removing log from staff:", e);
@@ -286,14 +300,14 @@ export class StaffRepository {
     
     async deleteEquInStaff(code: string) {
         try {
-            const equDocs = await Equipment.findOne({ code }).lean<{ _id: mongoose.Types.ObjectId } | null>();
+            const equDocs = await Equipment.findOne({ equipmentId:code }).lean<{ _id: mongoose.Types.ObjectId } | null>();
             if (!equDocs) {
                 throw new Error('Log with code ${code} not found');
             }
             const equId = equDocs._id;
             return await Staff.updateMany(
-                { assignEquipments: equId },
-                { $pull: { assignEquipments: equId } }
+                { equipments: equId },
+                { $pull: { equipments: equId } }
             );
         } catch (e) {
             console.error("Error removing equipment from staff:", e);
@@ -302,8 +316,14 @@ export class StaffRepository {
     }
     
     async findStaffById(code: string) : Promise<IStaff | null> {
-        return await Staff.findOne({ code }).populate("assignVehicles").populate("assignLogs").populate("assignFields").populate("assignEquipments").exec();
+        return await Staff.findOne({ staffId:code })  // <- Check if this condition is correct
+        .populate("fields")  
+        .populate("vehicles")
+        .populate("equipments")
+        .populate("logs")
+        .exec();
     }
+    
     
     async getSelectedStaff(_ids: mongoose.Types.ObjectId[]) {
         try {

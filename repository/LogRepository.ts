@@ -58,9 +58,23 @@ export class LogRepository{
         }
     }
 
+    async  deleteLog(code: string) {
+        try {
+            const result = await Log.deleteOne(
+                { logCode:code }
+            );
+            return result
+                ? { message: "Log delete successfully" }
+                : { message: "Log delete unsuccessfully!" };
+        } catch (e) {
+            console.error("Failed to delete log:", e);
+            throw e;
+        }
+    }
+
     async updateLogAssignCrop(code: string, cropData:CropModel) {
         try {
-            const cropDocs = await Crop.findOne({ code }).
+            const cropDocs = await Crop.findOne({ cropCode:code }).
             lean<{ _id: mongoose.Types.ObjectId }>();
             if (!cropDocs) {
                 throw new Error(`Crop with code ${code} not found`);
@@ -102,7 +116,7 @@ export class LogRepository{
 
     async updateLogAssignField(code: string, fieldData:FieldModel) {
         try {
-            const fieldDocs = await Field.findOne({ code }).
+            const fieldDocs = await Field.findOne({ fieldCode:code }).
             lean<{ _id: mongoose.Types.ObjectId }>();
             if (!fieldDocs) {
                 throw new Error(`Field with code ${code} not found`);
@@ -144,7 +158,7 @@ export class LogRepository{
 
     async updateLogAssignStaff(code: string, staffData:StaffModel) {
         try {
-            const staffDocs = await Staff.findOne({ code }).
+            const staffDocs = await Staff.findOne({ staffId:code }).
             lean<{ _id: mongoose.Types.ObjectId }>();
             if (!staffDocs) {
                 throw new Error(`Staff with code ${code} not found`);
@@ -195,7 +209,7 @@ export class LogRepository{
 
     async deleteStaffInLog(code: string) {
         try {
-            const staffDoc = await Staff.findOne({ code }).lean<{ _id: mongoose.Types.ObjectId } | null>();
+            const staffDoc = await Staff.findOne({ staffId:code }).lean<{ _id: mongoose.Types.ObjectId } | null>();
             if (!staffDoc) {
                 throw new Error(`Staff with code ${code} not found`);
             }
@@ -212,7 +226,7 @@ export class LogRepository{
 
     async deleteCropInLog(code: string) {
         try {
-            const cropDoc = await Crop.findOne({ code }).lean<{ _id: mongoose.Types.ObjectId } | null>();
+            const cropDoc = await Crop.findOne({ cropCode: code }).lean<{ _id: mongoose.Types.ObjectId } | null>();
             if (!cropDoc) {
                 throw new Error(`Crop with code ${code} not found`);
             }
@@ -229,7 +243,7 @@ export class LogRepository{
 
     async deleteFieldInLog(code: string) {
         try {
-            const FieldDoc = await Field.findOne({ code }).lean<{ _id: mongoose.Types.ObjectId } | null>();
+            const FieldDoc = await Field.findOne({ fieldCode:code }).lean<{ _id: mongoose.Types.ObjectId } | null>();
             if (!FieldDoc) {
                 throw new Error(`Field with code ${code} not found`);
             }
@@ -245,7 +259,7 @@ export class LogRepository{
     }
 
     async findLogById(code: string) : Promise<ILog | null> {
-        return await Log.findOne({ code }).populate("logStaff").populate("logCrop").populate("logField").exec();
+        return await Log.findOne({ logCode:code }).populate("logStaff").populate("logCrop").populate("logField").exec();
     }
 
 }

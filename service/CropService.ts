@@ -6,6 +6,25 @@ import Crop from "../schema/CropSchema";
 export class CropService {
     cropRepository = new CropRepository
 
+    async generateCropCode(): Promise<string> {
+        try {
+          const lastCrop = await Crop.findOne()
+            .sort({ cropCode: -1 })
+            .lean<{ cropCode: string } | null>();
+          if (lastCrop?.cropCode) {
+            const lastIdNumber = parseInt(
+                lastCrop.cropCode.replace("CROP-", ""),
+              10
+            );
+            return `CROP-${(lastIdNumber + 1).toString().padStart(3, "0")}`;
+          }
+          return "CROP-001";
+        } catch (error) {
+          console.error("Error generating staff ID:", error);
+          throw new Error("Failed to generate Staff ID.");
+        }
+      }
+
     async addCrop(cropData: CropModel) {
         try {
             let cropFieldsId: mongoose.Types.ObjectId[] = [];
@@ -20,7 +39,9 @@ export class CropService {
                 code: {$in: cropData.cropLogs},
             }).lean<{_id: mongoose.Types.ObjectId}[]>();
             cropLogsId = cropLogsDocs.map((log)=> log._id);
-
+            
+            const newCropCode = await this.generateCropCode();
+            cropData.cropCode = newCropCode
             const newCrop = new Crop({
                 cropCode: cropData.cropCode,
                 commonName: cropData.commonName,
@@ -40,21 +61,12 @@ export class CropService {
     }
 
     async getAllCrop() {
-        try{
-          const cropList = this.cropRepository.getAllCrop();
-          const newList = cropList.map(crop=>({
-            cropCode: crop.cropCode,
-            commonName: crop.commonName,
-            scientificName: crop.scientificName,
-            cropCategory: crop.cropCategory,
-            cropSeason: crop.cropSeason,
-            cropFields: crop.cropFields.map((field)=> field.fieldCode), // Extract only IDs
-            cropLogs: crop.cropLogs.map(log => log.logCode), // Extract only IDs
-            cropImage: crop.cropImage
-          }));
-          return newList;
-        }catch( error) {
-          return error;
-        }
+      try {
+        const cropList = this.cropRepository.getAllCrop();
+        return cropList;
+
+      }catch( error) {
+        return error;
       }
+    }
 }

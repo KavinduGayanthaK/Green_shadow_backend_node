@@ -6,6 +6,25 @@ import Equipment from "../schema/EquipmentSchema";
 export class EquipmentService {
     equipmentRepository = new EquipmentRepository
 
+    async generateCropCode(): Promise<string> {
+        try {
+          const lastEquipment = await Equipment.findOne()
+            .sort({ equipmentId: -1 })
+            .lean<{ equipmentId: string } | null>();
+          if (lastEquipment?.equipmentId) {
+            const lastIdNumber = parseInt(
+                lastEquipment.equipmentId.replace("EQUIPMENT-", ""),
+              10
+            );
+            return `EQUIPMENT-${(lastIdNumber + 1).toString().padStart(3, "0")}`;
+          }
+          return "EQUIPMENT-001";
+        } catch (error) {
+          console.error("Error generating staff ID:", error);
+          throw new Error("Failed to generate Staff ID.");
+        }
+      }
+
     async addEquipment(equipmentData: EquipmentModel) {
         try {
             let equipmentFieldsId: mongoose.Types.ObjectId[] = [];
@@ -20,7 +39,9 @@ export class EquipmentService {
                 code: {$in: equipmentData.equipmentStaffMembers},
             }).lean<{_id: mongoose.Types.ObjectId}[]>();
             equipmentStaffId = equipmentStaffDocs.map((staff)=> staff._id);
-
+            
+            const newEqId = await this.generateCropCode()
+            equipmentData.equipmentId = newEqId
             const newEquipment = new Equipment({
                 equipmentId: equipmentData.equipmentId,
                 equipmentName: equipmentData.equipmentName,

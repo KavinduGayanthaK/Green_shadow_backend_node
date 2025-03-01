@@ -5,6 +5,7 @@ export class VehicleModel {
   vehicleStatus: string;
   specialRemark: string;
   vehicleStaffMember: string;
+  vehicleName: any;
 
   constructor(
     licensePlateNumber: string,

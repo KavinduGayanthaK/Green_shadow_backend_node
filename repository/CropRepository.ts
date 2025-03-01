@@ -56,7 +56,7 @@ export class CropRepository {
 
   async updateCropAssignField(code: string, fieldDate: FieldModel) {
     try {
-      const fieldDocs = await Field.find({ code }).lean<{
+      const fieldDocs = await Field.find({ fieldCode:code }).lean<{
         _id: mongoose.Types.ObjectId;
       } | null>();
 
@@ -108,7 +108,7 @@ export class CropRepository {
 
   async updateCropAssignLog(code: string, logData: LogModel) {
     try {
-      const logDocs = await Log.findOne({ code }).lean<{
+      const logDocs = await Log.findOne({ logCode:code }).lean<{
         _id: mongoose.Types.ObjectId;
       }>();
 
@@ -158,7 +158,7 @@ export class CropRepository {
 
   async deleteFieldInCrop(code: string) {
     try {
-      const cropDocs = await Crop.findOne({ code }).lean<{
+      const cropDocs = await Crop.findOne({ cropCode:code }).lean<{
         _id: mongoose.Types.ObjectId;
       } | null>();
       if (!cropDocs) {
@@ -177,7 +177,7 @@ export class CropRepository {
 
   async deleteLogInCrop(code: string) {
     try {
-      const logDocs = await Log.findOne({ code }).lean<{
+      const logDocs = await Log.findOne({ logCode:code }).lean<{
         _id: mongoose.Types.ObjectId;
       } | null>();
       if (!logDocs) {
@@ -204,6 +204,6 @@ export class CropRepository {
   }
 
   async findCropById(code: string) : Promise<ICrop | null> {
-      return await Crop.findOne({ code }).populate("cropFields").populate("cropLogs").exec();
+      return await Crop.findOne({ cropCode:code }).populate("cropFields").populate("cropLogs").exec();
   }
 }

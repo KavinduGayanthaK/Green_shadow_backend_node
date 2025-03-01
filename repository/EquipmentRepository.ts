@@ -56,7 +56,7 @@ export class EquipmentRepository{
 
     async updateEquipmentAssignStaff(code: string, staffData:StaffModel) {
         try {
-            const staffDocs = await Staff.findOne({ code }).
+            const staffDocs = await Staff.findOne({ staffId:code }).
             lean<{ _id: mongoose.Types.ObjectId }>();
             if (!staffDocs) {
                 throw new Error(`Staff with code ${code} not found`);
@@ -98,7 +98,7 @@ export class EquipmentRepository{
 
     async updateEquipmentAssignField(code: string, fieldData:FieldModel) {
         try {
-            const fieldDocs = await Field.findOne({ code }).
+            const fieldDocs = await Field.findOne({ fieldCode:code }).
             lean<{ _id: mongoose.Types.ObjectId }>();
             if (!fieldDocs) {
                 throw new Error(`Field with code ${code} not found`);
@@ -149,7 +149,7 @@ export class EquipmentRepository{
 
     async deleteStaffInEquipment(code: string) {
         try {
-            const staffDoc = await Staff.findOne({ code }).lean<{ _id: mongoose.Types.ObjectId } | null>();
+            const staffDoc = await Staff.findOne({ staffId:code }).lean<{ _id: mongoose.Types.ObjectId } | null>();
             if (!staffDoc) {
                 throw new Error(`Staff with code ${code} not found`);
             }
@@ -166,7 +166,7 @@ export class EquipmentRepository{
 
     async deleteFieldInEquipment(code: string) {
         try {
-            const FieldDoc = await Field.findOne({ code }).lean<{ _id: mongoose.Types.ObjectId } | null>();
+            const FieldDoc = await Field.findOne({ fieldCode:code }).lean<{ _id: mongoose.Types.ObjectId } | null>();
             if (!FieldDoc) {
                 throw new Error(`Field with code ${code} not found`);
             }
@@ -182,7 +182,7 @@ export class EquipmentRepository{
     }
 
     async findEquipmentById(code: string) : Promise<IEquipment | null> {
-        return await Equipment.findOne({ code }).populate("equipmentStaffMember").populate("equipmentField").exec();
+        return await Equipment.findOne({ equipmentId:code }).populate("equipmentStaffMember").populate("equipmentField").exec();
     }
 
 

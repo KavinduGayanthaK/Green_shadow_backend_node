@@ -9,6 +9,8 @@ const router = express.Router();
 
 router.post('/add',async(req,res)=>{
     const log:LogModel = req.body;
+    console.log("Ented log add ",log);
+    
     try{
         const addLog = await logService.addLog(log);
         res.json(addLog);

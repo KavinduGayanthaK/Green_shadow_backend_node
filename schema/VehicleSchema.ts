@@ -9,7 +9,7 @@ export interface IVehicle extends Document {
     fuelType:vehicleFuelType;
     vehicleStatus:vehicelStatusType;
     specialRemark:string;
-    vehicleStaffMember:string[];
+    vehicleStaffMember:mongoose.Types.ObjectId[];
 }
 
 const vehicle = new Schema<IVehicle>({

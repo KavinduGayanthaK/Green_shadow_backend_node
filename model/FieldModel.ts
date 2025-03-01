@@ -5,6 +5,7 @@ export class FieldModel {
   extentSizeOfTheField: string;
   fieldCrops: string[];
   fieldStaff: string[];
+  fieldEquipments: string[];
   fieldLogs: string[];
   fieldImage: string;
 
@@ -15,6 +16,7 @@ export class FieldModel {
     extentSizeOfTheField: string,
     fieldCrops: string[],
     fieldStaff: string[],
+    fieldEquipments: string[],
     fieldLogs: string[],
     fieldImage: string
   ) {
@@ -24,6 +26,7 @@ export class FieldModel {
     this.extentSizeOfTheField = extentSizeOfTheField;
     this.fieldCrops = fieldCrops;
     this.fieldStaff = fieldStaff;
+    this.fieldEquipments = fieldEquipments;
     this.fieldLogs = fieldLogs;
     this.fieldImage = fieldImage;
   }

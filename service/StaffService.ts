@@ -41,7 +41,7 @@ export class StaffService {
     try {
       let assignVehicleIds: mongoose.Types.ObjectId[] = [];
       let assignLogIds: mongoose.Types.ObjectId[] = [];
-      let assignFieldIds: mongoose.Types.ObjectId[] = [];
+      let assignFieldIds: mongoose.Types.ObjectId[] = []; 
       let assignEquipmentIds: mongoose.Types.ObjectId[] = [];
       let assignFieldNames: string[] = [];
       let assignLogNames: string[] = [];
@@ -225,10 +225,10 @@ export class StaffService {
       const getLogs = await this.logRepository.getSelectedLogs(result.assignLogs);
       assignLogNames = getLogs.map((log) => log.name);
       const getFields = await this.fieldRepository.getSelectedField(result.assignFields);
-      assignFieldNames = getFields.map((field) => field.name);
+      assignFieldNames = getFields.map((field) => field.fieldName);
 
       const getEquipments = await this.equipmentRepository.getSelectedEquipment(result.assignEquipments);
-      assignEquipmentNames = getEquipments.map((equ) => equ.name);
+      assignEquipmentNames = getEquipments.map((equ) => equ.equipmentName);
 
       const modifiedResult = {
         ...result.toObject(),

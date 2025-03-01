@@ -2,8 +2,18 @@ import express from 'express';
 import mongoose from 'mongoose';
 import VehicleRouter from './/routes/VehicleRoutes'
 import StaffRouter from './/routes/StaffRoutes'
+import FieldRouter from './/routes/FieldRoutes'
+import CropRouter from './/routes/CropRoutes'
+import LogRouter from './/routes/LogRoutes'
+import AuthRoutes from './/routes/AuthRoutes'
+import EquipmentRouter from './/routes/EquipmentRoutes'
+import { authenticateToken } from './middleware/Authenticate';
+import  dotenv  from 'dotenv';
+import cors from 'cors';
+
 
 const app = express();
+dotenv.config();
 
 mongoose.connect("mongodb://localhost:27017/greenshadownode")
 const db = mongoose.connection
@@ -17,24 +27,26 @@ db.on("open",()=>{
 })
 
 app.use(express.json());
-app.use('/',(req,res,next)=>{
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, content-type');
-
-    next();
-})
+app.use(cors({
+    origin: 'http://localhost:5173',  // Allow frontend origin
+    methods: 'GET,PUT,POST,DELETE',
+    allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+    credentials: true  // Allow credentials (cookies, authentication headers)
+}));
 
 
 app.listen(3000, (err=>{
     console.log("Server running on port 3000");
 }));
-app.use('/vehicle',VehicleRouter);
-app.use('/staff',StaffRouter);
-app.use('/field',StaffRouter);
-app.use('/equipment',StaffRouter);
-app.use('/crop',StaffRouter);
-app.use('/log',StaffRouter);
+app.use('/auth', AuthRoutes);
+app.use('/vehicle',authenticateToken,VehicleRouter);
+app.use('/staff',authenticateToken,StaffRouter);
+app.use('/field',authenticateToken,FieldRouter);
+app.use('/equipment',authenticateToken,EquipmentRouter);
+app.use('/crop',authenticateToken,CropRouter);
+app.use('/log',authenticateToken,LogRouter);
+
+app.use(authenticateToken);
 
 app.use('/',(req,res,next)=>{
     res.status(400).send('Not Found');

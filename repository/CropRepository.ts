@@ -20,6 +20,7 @@ interface Crop {
 }
 
 export class CropRepository {
+  
   async addCrop(cropData: Crop) {
     try {
       const newCrop = new Crop(cropData);
@@ -40,6 +41,18 @@ export class CropRepository {
     }
   }
 
+  async deleteCrop(code: string) {
+    try {
+      const result = await Crop.deleteOne({ cropCode: code });
+      return result
+        ? { message: "Crop delete successfully" }
+        : { message: "Crop delete unsuccessfully!" };
+    } catch (e) {
+      console.error("Failed to delete Crop:", e);
+      throw e;
+    }
+  }
+
   async updatCrop(cropCode: string, updateData: Partial<ICrop>) {
     try {
       const updateCrop = await Crop.findOneAndUpdate(
@@ -56,7 +69,7 @@ export class CropRepository {
 
   async updateCropAssignField(code: string, fieldDate: FieldModel) {
     try {
-      const fieldDocs = await Field.find({ fieldCode:code }).lean<{
+      const fieldDocs = await Field.find({ fieldCode: code }).lean<{
         _id: mongoose.Types.ObjectId;
       } | null>();
 
@@ -108,7 +121,7 @@ export class CropRepository {
 
   async updateCropAssignLog(code: string, logData: LogModel) {
     try {
-      const logDocs = await Log.findOne({ logCode:code }).lean<{
+      const logDocs = await Log.findOne({ logCode: code }).lean<{
         _id: mongoose.Types.ObjectId;
       }>();
 
@@ -158,7 +171,7 @@ export class CropRepository {
 
   async deleteFieldInCrop(code: string) {
     try {
-      const cropDocs = await Crop.findOne({ cropCode:code }).lean<{
+      const cropDocs = await Crop.findOne({ cropCode: code }).lean<{
         _id: mongoose.Types.ObjectId;
       } | null>();
       if (!cropDocs) {
@@ -177,7 +190,7 @@ export class CropRepository {
 
   async deleteLogInCrop(code: string) {
     try {
-      const logDocs = await Log.findOne({ logCode:code }).lean<{
+      const logDocs = await Log.findOne({ logCode: code }).lean<{
         _id: mongoose.Types.ObjectId;
       } | null>();
       if (!logDocs) {
@@ -196,14 +209,17 @@ export class CropRepository {
 
   async getSelectedCrop(_ids: mongoose.Types.ObjectId[]) {
     try {
-        return await Crop.find({ _id: { $in: _ids } });
+      return await Crop.find({ _id: { $in: _ids } });
     } catch (e) {
-        console.error("Error fetching selected crop:", e);
-        throw new Error("Failed to fetch selected crop. Please try again.");
+      console.error("Error fetching selected crop:", e);
+      throw new Error("Failed to fetch selected crop. Please try again.");
     }
   }
 
-  async findCropById(code: string) : Promise<ICrop | null> {
-      return await Crop.findOne({ cropCode:code }).populate("cropFields").populate("cropLogs").exec();
+  async findCropById(code: string): Promise<ICrop | null> {
+    return await Crop.findOne({ cropCode: code })
+      .populate("cropFields")
+      .populate("cropLogs")
+      .exec();
   }
 }

@@ -6,10 +6,10 @@ export class CropModel {
     cropSeason: string;
     cropFields: string[];
     cropLogs: string[];
-    cropImage: string;
+    cropImage: string | null;
   
     constructor(cropCode: string,commonName: string,scientificName: string,cropCategory: string,
-      cropSeason: string,cropFields: string[], cropLogs:string[], cropImage: string) {
+      cropSeason: string,cropFields: string[], cropLogs:string[], cropImage: string | null) {
   
           this.cropCode = cropCode;
           this.commonName = commonName;

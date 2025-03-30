@@ -7,8 +7,11 @@ const fieldService = new FieldService();
 const router = express.Router();
 
 router.post('/add',async(req,res)=>{
+    const file = req.body.file;
+    const base64 = file?.buffer.toString('base64');
     const field:FieldModel = req.body;
     try{
+        field.fieldImage = base64;
         const addField = await fieldService.addField(field);
         res.json(addField);
     }catch(error) {

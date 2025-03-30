@@ -259,7 +259,7 @@ export class LogRepository{
     }
 
     async findLogById(code: string) : Promise<ILog | null> {
-        return await Log.findOne({ logCode:code }).populate("logStaff").populate("logCrop").populate("logField").exec();
+        return await Log.findOne({ logCode:code }).populate("logStaff").populate("logCrops").populate("logFields").exec();
     }
 
 }

@@ -8,9 +8,9 @@ import { saveUserService, verifyUserCredentialsService } from "../service/UserSe
 
 dotenv.config();
 
-const router = express.Router();
+const AuthRouter = express.Router();
 
-router.post("/login", async (req, res) => {
+AuthRouter.post("/login", async (req, res) => {
     console.log("Enter Login");
     
     const username = req.body.username;
@@ -34,7 +34,7 @@ router.post("/login", async (req, res) => {
     }
 });
 
-router.post("/register", async (req, res) => {
+AuthRouter.post("/register", async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
 
@@ -49,7 +49,7 @@ router.post("/register", async (req, res) => {
     }
 });
 
-router.post("/refresh-token", async (req, res) => {
+AuthRouter.post("/refresh-token", async (req, res) => {
     const authHeader = req.headers.authorization;
     const refresh_token = authHeader?.split(' ')[1];
 
@@ -59,10 +59,11 @@ router.post("/refresh-token", async (req, res) => {
         const payload = jwt.verify(refresh_token as string, process.env.REFRESH_TOKEN as Secret) as {username: string, iat: number};
         const token = jwt.sign({ username: payload.username }, process.env.SECRET_KEY as Secret, {expiresIn: "7d"});
         res.json({accessToken : token});
+        
     }catch(err){
         console.log(err);
         res.status(401).json(err);
     }
 });
 
-export default router;
+export default AuthRouter;

@@ -61,7 +61,7 @@ export class EquipmentService {
 
     async getAllEquipment() {
         try{
-          const equipmentList = this.equipmentRepository.getAllEquipment();
+          const equipmentList = await this.equipmentRepository.getAllEquipment();
           return equipmentList
         }catch( error) {
           return error;

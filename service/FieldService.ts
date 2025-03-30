@@ -80,7 +80,7 @@ export class FieldService {
 
   async getAllFields() {
     try {
-      const fieldList = this.fieldRepository.getAllField();
+      const fieldList =await  this.fieldRepository.getAllField();
       return fieldList;
     } catch (error) {
       return error;

@@ -28,17 +28,15 @@ db.on("open",()=>{
 
 app.use(express.json());
 app.use(cors({
-    origin: 'http://localhost:5173',  // Allow frontend origin
+    origin: 'http://localhost:5173', 
     methods: 'GET,PUT,POST,DELETE',
     allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
-    credentials: true  // Allow credentials (cookies, authentication headers)
+    credentials: true 
 }));
 
 
-app.listen(3000, (err=>{
-    console.log("Server running on port 3000");
-}));
 app.use('/auth', AuthRoutes);
+app.use('/uploads', express.static('uploads'));
 app.use('/vehicle',authenticateToken,VehicleRouter);
 app.use('/staff',authenticateToken,StaffRouter);
 app.use('/field',authenticateToken,FieldRouter);
@@ -46,8 +44,13 @@ app.use('/equipment',authenticateToken,EquipmentRouter);
 app.use('/crop',authenticateToken,CropRouter);
 app.use('/log',authenticateToken,LogRouter);
 
-app.use(authenticateToken);
+
 
 app.use('/',(req,res,next)=>{
     res.status(400).send('Not Found');
 })
+
+
+app.listen(3000, (err=>{
+    console.log("Server running on port 3000");
+}));
